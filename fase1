@@ -1,0 +1,100 @@
+import pygame
+import sys
+
+# Inicializar pygame
+pygame.init()
+
+# Configuración de la pantalla
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Figuras Geométricas")
+
+# Colores
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Función para dibujar el cursor
+def draw_cursor(x, y):
+    pygame.draw.circle(SCREEN, BLACK, (x, y), 5)
+
+# Funciones para dibujar las figuras
+def draw_triangle(base, x, y):
+    pygame.draw.polygon(SCREEN, BLACK, [(x, y), (x + base // 2, y + base), (x - base // 2, y + base)])
+
+def draw_square(side, x, y):
+    pygame.draw.rect(SCREEN, BLACK, (x, y, side, side))
+
+def draw_rectangle(width, height, x, y):
+    pygame.draw.rect(SCREEN, BLACK, (x, y, width, height))
+
+def draw_circle(radius, x, y):
+    pygame.draw.circle(SCREEN, BLACK, (x, y), radius)
+
+# Función principal
+def main():
+    running = True
+    cursor_x, cursor_y = SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2
+
+    while running:
+        SCREEN.fill(WHITE)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+                elif event.key == pygame.K_F12:
+                    # Mostrar menú
+                    print("Elija una figura:")
+                    print("1. Triángulo")
+                    print("2. Cuadrado")
+                    print("3. Rectángulo")
+                    print("4. Círculo")
+                    option = int(input())
+
+                    if option == 1:
+                        base = int(input("Ingrese el tamaño de la base del triángulo: "))
+                        draw_triangle(base, cursor_x, cursor_y)
+                    elif option == 2:
+                        side = int(input("Ingrese el tamaño de un lado del cuadrado: "))
+                        draw_square(side, cursor_x, cursor_y)
+                    elif option == 3:
+                        width = int(input("Ingrese el ancho del rectángulo: "))
+                        height = int(input("Ingrese la altura del rectángulo: "))
+                        draw_rectangle(width, height, cursor_x, cursor_y)
+                    elif option == 4:
+                        radius = int(input("Ingrese el radio del círculo: "))
+                        draw_circle(radius, cursor_x, cursor_y)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            cursor_y -= 5
+        elif keys[pygame.K_DOWN]:
+            cursor_y += 5
+        elif keys[pygame.K_LEFT]:
+            cursor_x -= 5
+        elif keys[pygame.K_RIGHT]:
+            cursor_x += 5
+
+        # Implementación de pantalla circular
+        if cursor_x < 0:
+            cursor_x = SCREEN_WIDTH
+        elif cursor_x > SCREEN_WIDTH:
+            cursor_x = 0
+
+        if cursor_y < 0:
+            cursor_y = SCREEN_HEIGHT
+        elif cursor_y > SCREEN_HEIGHT:
+            cursor_y = 0
+
+        draw_cursor(cursor_x, cursor_y)
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+if __name__ == "__main__":
+    main()
